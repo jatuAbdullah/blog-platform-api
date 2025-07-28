@@ -1,12 +1,4 @@
-Thanks for the clarification — your GitHub-rendered `README.md` is broken because:
 
-* You're using *plain text tree diagrams* without code block formatting
-* You’re using `---` horizontal rules **excessively** (back-to-back), which creates weird rendering
-* Some sections aren't **closed properly**, especially in `Getting Started`
-
----
-
-### ✅ Here's a Clean, GitHub-Compatible Version
 
 ````markdown
 # 📰 Blog Platform API
