@@ -1,46 +1,42 @@
-
-
-````markdown
 # 📰 Blog Platform API
 
-A simple blog platform built using **NestJS**, **TypeORM**, and **PostgreSQL**, supporting:
+A simple yet powerful blog platform built using **NestJS**, **TypeORM**, and **PostgreSQL**, supporting:
 
-- User authentication with roles
-- Article creation and management
-- Commenting system
-- Like functionality for articles and comments
-- JWT-based authentication
-- Clean RESTful API
+- ✅ User authentication with role-based access
+- ✍️ Article creation and management
+- 💬 Commenting system
+- ❤️ Like functionality for articles and comments
+- 🔐 JWT-based authentication
+- 🔗 Clean RESTful API
 
 ---
 
 ## 🚀 Tech Stack
 
-- **Backend:** NestJS
-- **Database:** PostgreSQL
-- **ORM:** TypeORM
-- **Authentication:** Passport.js with JWT
-- **Authorization:** Role-based access control
-- **Queue (Planned):** Kafka for async events (e.g. likes/notifications)
+- **Backend:** [NestJS](https://nestjs.com/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/)
+- **ORM:** [TypeORM](https://typeorm.io/)
+- **Authentication:** [Passport.js](http://www.passportjs.org/) with JWT
+- **Authorization:** Role-based access control via decorators
+- **Queue (Planned):** Kafka for asynchronous events (e.g., notifications on likes)
 
 ---
 
 ## 📁 Project Structure
 
 <details>
-<summary>Directory Overview</summary>
+<summary><strong>Click to expand project directory</strong></summary>
 
 ```txt
 src/
-├── auth/         # Auth module (login/register)
-├── user/         # User entity, service, controller
-├── article/      # Article CRUD
+├── auth/         # Authentication (login/register, JWT strategy)
+├── user/         # User module (entity, service, controller)
+├── article/      # Article CRUD operations
 ├── comment/      # Commenting on articles
-├── like/         # Like system for articles/comments
-├── common/       # Guards, decorators (e.g., Roles)
-└── main.ts       # Entry point
-````
-
+├── like/         # Like/unlike functionality for articles and comments
+├── common/       # Shared utilities (guards, decorators like @Roles)
+└── main.ts       # Application entry point
+```
 </details>
 
 ---
@@ -55,39 +51,37 @@ npm install
 
 ### 2️⃣ Configure Environment Variables
 
-Create a `.env` file:
+Create a `.env` file in the root directory:
 
 ```env
 DATABASE_URL=postgres://user:password@localhost:5432/blogdb
 JWT_SECRET=your_jwt_secret
 ```
 
-### 3️⃣ Run the Project
+### 3️⃣ Run the Application
 
 ```bash
 npm run start:dev
 ```
 
----
-
-## 🔁 Like Feature
-
-* `POST /likes/toggle?articleId=1` – Like or unlike an article
-* `POST /likes/toggle?commentId=1` – Like or unlike a comment
-* Only one like allowed per user per item (unique constraint)
+> Ensure PostgreSQL is running and matches the credentials provided.
 
 ---
 
-## ✅ Auth Flow
+## ❤️ Like Feature
 
-* Users register and login via `/auth/register` and `/auth/login`
-* JWT token must be included in `Authorization: Bearer <token>` for protected routes
-* Role-based access control supported via `@Roles()` decorator
+- `POST /likes/toggle?articleId=1` — Toggle like/unlike on an article
+- `POST /likes/toggle?commentId=1` — Toggle like/unlike on a comment
+- Enforces **one like per user per target** using a unique constraint
 
 ---
 
-## 🧩 Future Plans
+## 🔐 Authentication Flow
 
-* Kafka for async like events (notifications)
-* Soft delete support for articles/comments
-* Admin dashboard (role-based access)
+- **Register:** `POST /auth/register`
+- **Login:** `POST /auth/login`
+- **Token Usage:** Include JWT in header  
+  `Authorization: Bearer <token>`
+- **Access Control:** Use `@Roles()` decorator to protect routes based on user roles
+
+---
