@@ -1,7 +1,14 @@
+Thanks for the clarification — your GitHub-rendered `README.md` is broken because:
+
+* You're using *plain text tree diagrams* without code block formatting
+* You’re using `---` horizontal rules **excessively** (back-to-back), which creates weird rendering
+* Some sections aren't **closed properly**, especially in `Getting Started`
 
 ---
 
-```markdown
+### ✅ Here's a Clean, GitHub-Compatible Version
+
+````markdown
 # 📰 Blog Platform API
 
 A simple blog platform built using **NestJS**, **TypeORM**, and **PostgreSQL**, supporting:
@@ -22,50 +29,48 @@ A simple blog platform built using **NestJS**, **TypeORM**, and **PostgreSQL**, 
 - **ORM:** TypeORM
 - **Authentication:** Passport.js with JWT
 - **Authorization:** Role-based access control
-- **Caching/Queue (Planned):** Kafka (upcoming)
-
-
-
+- **Queue (Planned):** Kafka for async events (e.g. likes/notifications)
 
 ---
 
 ## 📁 Project Structure
 
+<details>
+<summary>Directory Overview</summary>
 
+```txt
 src/
-├── auth/         # Auth module (login)
+├── auth/         # Auth module (login/register)
 ├── user/         # User entity, service, controller
 ├── article/      # Article CRUD
 ├── comment/      # Commenting on articles
 ├── like/         # Like system for articles/comments
-├── common/       # Guards, decorators (e.g. Roles)
+├── common/       # Guards, decorators (e.g., Roles)
 └── main.ts       # Entry point
+````
 
----
+</details>
 
 ---
 
 ## 🧪 Getting Started
 
-### 📦 Install dependencies
+### 1️⃣ Install Dependencies
 
 ```bash
 npm install
-````
-
-### 🔧 Configure `.env`
-
-```
-DB_HOST=localhost
-DB_PORT=3306
-DB_USERNAME=root
-DB_PASSWORD=yourpassword
-DB_DATABASE=blog
-JWT_SECRET=supersecret
-JWT_EXPIRES_IN=3600s
 ```
 
-### ⚙️ Run the server
+### 2️⃣ Configure Environment Variables
+
+Create a `.env` file:
+
+```env
+DATABASE_URL=postgres://user:password@localhost:5432/blogdb
+JWT_SECRET=your_jwt_secret
+```
+
+### 3️⃣ Run the Project
 
 ```bash
 npm run start:dev
@@ -73,68 +78,24 @@ npm run start:dev
 
 ---
 
-## 📌 API Overview
+## 🔁 Like Feature
 
-### 🔐 AUTH
-
-| Method | Endpoint      | Description |
-| ------ | ------------- | ----------- |
-| POST   | `/auth/login` | User login  |
+* `POST /likes/toggle?articleId=1` – Like or unlike an article
+* `POST /likes/toggle?commentId=1` – Like or unlike a comment
+* Only one like allowed per user per item (unique constraint)
 
 ---
 
-### 👤 USER
+## ✅ Auth Flow
 
-| Method | Endpoint     | Description     |
-| ------ | ------------ | --------------- |
-| GET    | `/users/`    | Get all users   |
-| POST   | `/users/`    | Create new user |
-| DELETE | `/users/:id` | Delete a user   |
+* Users register and login via `/auth/register` and `/auth/login`
+* JWT token must be included in `Authorization: Bearer <token>` for protected routes
+* Role-based access control supported via `@Roles()` decorator
 
 ---
 
-### 📝 ARTICLE
+## 🧩 Future Plans
 
-| Method | Endpoint        | Description       |
-| ------ | --------------- | ----------------- |
-| GET    | `/article`      | Get all articles  |
-| POST   | `/articles`     | Create an article |
-| PATCH  | `/articles`     | Update an article |
-| DELETE | `/articles/:id` | Delete an article |
-
----
-
-### 💬 COMMENT
-
-| Method | Endpoint              | Description                     |
-| ------ | --------------------- | ------------------------------- |
-| POST   | `/comment/`           | Create a comment for an article |
-| GET    | `/comment/:articleId` | Get comments for an article     |
-
----
-
-### ❤️ LIKE
-
-#### ✅ For Comments
-
-| Method | Endpoint                       | Description              |
-| ------ | ------------------------------ | ------------------------ |
-| POST   | `/likes/toggle?commentId={id}` | Like/unlike a comment    |
-| GET    | `/likes/comment?id={id}`       | Get liked comments by ID |
-
-#### ✅ For Articles
-
-| Method | Endpoint                       | Description              |
-| ------ | ------------------------------ | ------------------------ |
-| POST   | `/likes/toggle?articleId={id}` | Like/unlike an article   |
-| GET    | `/likes/article?id={id}`       | Get liked articles by ID |
-
----
-
-## 🧑‍💻 Authentication & Roles
-
-* JWT-based authentication using `@UseGuards(AuthGuard('jwt'))`
-* Role protection using `@Roles('admin')` and custom `RolesGuard`
-
----
-
+* Kafka for async like events (notifications)
+* Soft delete support for articles/comments
+* Admin dashboard (role-based access)
